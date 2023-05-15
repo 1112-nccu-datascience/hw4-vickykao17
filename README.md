@@ -2,7 +2,7 @@
 
 #### Name: 高語謙
 #### Student ID: 111753130
-#### ShinyApps link: [<https://yourname.shinyapps.io/NCCU_DS2023_hw4_studentID/>]
+#### ShinyApps link: [<https://vickykao.shinyapps.io/NCCU_DS2023_hw4_111753130/>]
 
 ## Description
 
