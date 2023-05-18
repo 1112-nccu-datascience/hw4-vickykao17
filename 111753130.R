@@ -15,6 +15,7 @@ ui <- fluidPage(
     tabPanel(icon("home"),
              fluidRow(p(strong(h3("HW4 Interactive web service of PCA and CA analysis by Shinyapp")))), 
              fluidRow(p(h4("Name: 高語謙"))), 
+             fluidRow(p(h4("Department: 資科碩一"))), 
              fluidRow(p(h4("Student ID: 111753130"))), 
     ), 
     tabPanel("PCA analysis", icon = icon("chart-line"), 
@@ -38,21 +39,39 @@ ui <- fluidPage(
              )
     ), 
     tabPanel("CA analysis", icon = icon("chart-line"),
-             mainPanel(
-               plotOutput("ca")
-
-             )
+             # mainPanel(
+             #   plotOutput("ca")
+             # 
+             # )
              # sidebarLayout(
              #   sidebarPanel(
-             # 
-             # 
+             #     sliderInput("n", "Number of points", min = 1, max = 150,
+             #                 value = 10, step = 1),
              #   ),
              # 
              #   mainPanel(
              #     plotOutput("ca")
-             #     
+             # 
              #   )
              # )
+             tabsetPanel(
+               tabPanel('CA Plot', 
+                        sidebarLayout(
+                          sidebarPanel(
+                            sliderInput("n", "Number of points", min = 1, max = 150,
+                                        value = 75, step = 1),
+                          ), 
+                          mainPanel(
+                            plotOutput("ca")
+                          ),  
+                        ),
+               ), 
+               tabPanel('Result', 
+                        mainPanel(
+                          verbatimTextOutput('ca_res')
+                        )
+               )
+             )
     ), 
     tabPanel("Data", icon = icon("database"), 
              tabsetPanel(
@@ -107,15 +126,25 @@ server <- function(input, output, session) {
     log.ir <- log(iris[, 1:4])
     ir.species <- iris[, 5]
 
-    res.ca <- CA(iris[,1:4])
+    res.ca <- CA(iris[1:input$n,1:4])
 
-
+    print(res.ca)
     gr <- plot(res.ca) + 
           theme(panel.grid.major = element_blank(),
                 plot.title=element_text(size=14, color="blue"),
                 axis.title = element_text(size=12, color="red"))
     print(gr)
 
+  })
+  output$ca_res <- renderPrint({
+    data(iris)
+    # log transform
+    log.ir <- log(iris[, 1:4])
+    ir.species <- iris[, 5]
+    
+    res.ca <- CA(iris[,1:4])
+    
+    print(res.ca)
   })
   output$data <- DT::renderDataTable(datatable(iris))
   # output$pca_res <- DT::renderDataTable({
@@ -149,3 +178,4 @@ server <- function(input, output, session) {
 
 # Create Shiny app ----
 shinyApp(ui = ui, server = server)
+
